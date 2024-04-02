@@ -1,6 +1,7 @@
 import Plex from "@/services/plex.ts"
 import { plex_libs, plex_movies } from "@/services/plex.interfaces.ts"
 import { useEffect, useState } from "react"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 const Movies = () => {
     const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
@@ -16,6 +17,29 @@ const Movies = () => {
         const data = await response.json() as plex_libs
         set_lib_response(data)
         return lib_response
+    }
+
+    function movies_display() {
+        if (undefined === movies) {
+            return ""
+        }
+
+        return movies.MediaContainer.Metadata.map(movie =>
+            <Card key={movie.index} className="w-1/5 mb-4">
+                <CardHeader>
+                    <CardTitle>
+                        {movie.title}
+                    </CardTitle>
+                    <CardDescription>
+                        {movie.contentRating}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {movie.art}
+                </CardContent>
+                <CardFooter></CardFooter>
+            </Card>
+        )
     }
 
     useEffect(() => {
@@ -46,7 +70,12 @@ const Movies = () => {
     })
 
     return (
-        <h1>Movies</h1>
+        <>
+            <h1>Movies</h1>
+            <div className="flex flex-wrap justify-evenly gap-1">
+                {movies_display()}
+            </div>
+        </>
     )
 }
 

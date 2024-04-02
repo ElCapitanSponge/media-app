@@ -1,11 +1,35 @@
 import Plex from "@/services/plex.ts"
 import { plex_libs, plex_shows } from "@/services/plex.interfaces.ts"
 import { useEffect, useState } from "react"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 const Shows = () => {
     const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
     const [shows_id, set_shows_id] = useState<undefined | number>(undefined)
     const [shows, set_shows] = useState<undefined | plex_shows>(undefined)
+
+    function show_display() {
+        if (undefined === shows) {
+            return ""
+        }
+
+        return shows.MediaContainer.Metadata.map(show =>
+            <Card key={show.index} className="w-1/5 mb-4">
+                <CardHeader>
+                    <CardTitle>
+                        {show.title}
+                    </CardTitle>
+                    <CardDescription>
+                        {show.contentRating}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {show.art}
+                </CardContent>
+                <CardFooter></CardFooter>
+            </Card>
+        )
+    }
 
     const lib_get = async () => {
         if (lib_response) {
@@ -46,7 +70,12 @@ const Shows = () => {
     })
 
     return (
-        <h1>Shows</h1>
+        <>
+            <h1>Shows</h1>
+            <div className="flex flex-wrap justify-evenly gap-1">
+                {show_display()}
+            </div>
+        </>
     )
 }
 

@@ -41,7 +41,71 @@ export interface plex_libs extends plex_core {
 }
 
 export interface plex_movie {
-
+    Country: {
+        tag: string
+    }[],
+    Genre: {
+        tag: string
+    }[],
+    Role: {
+        tag: string
+    }[],
+    Director: {
+        tag: string
+    }[],
+    Writer: {
+        tag: string
+    }[],
+    Media: {
+        Part: {
+            audioProfile: string,
+            container: string,
+            duration: number,
+            file: string,
+            has64bitOffsets: boolean,
+            size: number,
+            videoProfile: string
+        }[],
+        aspectRatio: number,
+        audioChannels: number,
+        audioCodec: string,
+        audioProfile: string,
+        bitrate: number,
+        container: string,
+        duration: number,
+        has64bitOffsets: boolean,
+        height: number,
+        id: number,
+        optimizedForStreaming: number,
+        videoCodec: string,
+        videoFrameRate: string,
+        videoProfile: string,
+        videoResolution: string,
+        width: number
+    }[],
+    addedAt: number,
+    art: string,
+    audienceRating: number,
+    audienceRatingImage: string,
+    childCount: number,
+    contentRating: string,
+    duration: number,
+    guid: string,
+    index: number,
+    key: string,
+    leafCount: number,
+    originallyAvailableAt: string | Date,
+    ratingKey: string,
+    studio: string,
+    summary: string,
+    tagline: string,
+    theme: string,
+    thumb: string,
+    title: string,
+    type: string,
+    updatedAt: number,
+    viewedLeafCount: number,
+    year: number
 }
 
 export interface plex_movies extends plex_core {
@@ -62,7 +126,38 @@ export interface plex_movies extends plex_core {
 }
 
 export interface plex_show {
-
+    Country: {
+        tag: string
+    }[],
+    Genre: {
+        tag: string
+    }[],
+    Role: {
+        tag: string
+    }[],
+    addedAt: number,
+    art: string,
+    audienceRating: number,
+    audienceRatingImage: string,
+    childCount: number,
+    contentRating: string,
+    duration: number,
+    guid: string,
+    index: number,
+    key: string,
+    leafCount: number,
+    originallyAvailableAt: string | Date,
+    ratingKey: string,
+    studio: string,
+    summary: string,
+    tagline: string,
+    theme: string,
+    thumb: string,
+    title: string,
+    type: string,
+    updatedAt: number,
+    viewedLeafCount: number,
+    year: number
 }
 
 export interface plex_shows extends plex_core {

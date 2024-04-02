@@ -1,26 +1,30 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Plex from "@/services/plex"
+import { Button } from "@/components/ui/button.tsx"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx"
+import Plex from "@/services/plex.ts"
+import { plex_libs, plex_movies, plex_shows } from "@/services/plex.interfaces.ts"
 import { ChevronRight, Popcorn, TvIcon } from "lucide-react"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const Index = () => {
 
-    const [lib_response, set_lib_response] = useState(undefined)
-    const [movies_id, set_movies_id] = useState(undefined)
-    const [shows_id, set_shows_id] = useState(undefined)
-    const [movie_count, set_movie_count] = useState(0)
-    const [show_count, set_show_count] = useState(0)
+    const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
+    const [movies_id, set_movies_id] = useState<undefined | number>(undefined)
+    const [shows_id, set_shows_id] = useState<undefined | number>(undefined)
+    const [movie_count, set_movie_count] = useState<number>(0)
+    const [show_count, set_show_count] = useState<number>(0)
 
     const lib_get = async () => {
         if (lib_response) {
+            console.log("lib", lib_response)
             return lib_response
         }
 
         const response = await Plex.libraries_get()
-        const data = await response.json()
+        const data = await response.json() as plex_libs
         set_lib_response(data)
+        console.log("lib", lib_response)
+        return lib_response
     }
 
     useEffect(() => {
@@ -52,7 +56,8 @@ const Index = () => {
                 if (undefined !== movies_id) {
                     Plex.movies_get(movies_id)
                         .then(response => response.json())
-                        .then(result => {
+                        .then((result: plex_movies) => {
+                            console.log("movies", result)
                             set_movie_count(result.MediaContainer.size)
                         })
                         .catch(error => console.error(error))
@@ -61,7 +66,8 @@ const Index = () => {
                 if (undefined !== shows_id) {
                     Plex.shows_get(shows_id)
                         .then(response => response.json())
-                        .then(result => {
+                        .then((result: plex_shows) => {
+                            console.log("shows", result)
                             set_show_count(result.MediaContainer.size)
                         })
                         .catch(error => console.error(error))

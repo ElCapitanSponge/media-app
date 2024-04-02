@@ -16,14 +16,12 @@ const Index = () => {
 
     const lib_get = async () => {
         if (lib_response) {
-            console.log("lib", lib_response)
             return lib_response
         }
 
         const response = await Plex.libraries_get()
         const data = await response.json() as plex_libs
         set_lib_response(data)
-        console.log("lib", lib_response)
         return lib_response
     }
 
@@ -57,7 +55,6 @@ const Index = () => {
                     Plex.movies_get(movies_id)
                         .then(response => response.json())
                         .then((result: plex_movies) => {
-                            console.log("movies", result)
                             set_movie_count(result.MediaContainer.size)
                         })
                         .catch(error => console.error(error))
@@ -67,7 +64,6 @@ const Index = () => {
                     Plex.shows_get(shows_id)
                         .then(response => response.json())
                         .then((result: plex_shows) => {
-                            console.log("shows", result)
                             set_show_count(result.MediaContainer.size)
                         })
                         .catch(error => console.error(error))

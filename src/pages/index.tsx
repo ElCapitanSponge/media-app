@@ -52,7 +52,7 @@ const Index = () => {
             })
             .then(() => {
                 if (undefined !== movies_id) {
-                    Plex.movies_get(movies_id)
+                    Plex.library_get(movies_id)
                         .then(response => response.json())
                         .then((result: plex_movies) => {
                             set_movie_count(result.MediaContainer.size)
@@ -61,7 +61,7 @@ const Index = () => {
                 }
 
                 if (undefined !== shows_id) {
-                    Plex.shows_get(shows_id)
+                    Plex.library_get(shows_id)
                         .then(response => response.json())
                         .then((result: plex_shows) => {
                             set_show_count(result.MediaContainer.size)

@@ -13,7 +13,7 @@ const Movie = () => {
         updateLib,
         updateMovies
     } = useContext(PlexContext) as plex_libs_context
-    const [ movie, setMovie ] = useState<plex_movie | undefined>(undefined)
+    const [movie, setMovie] = useState<plex_movie | undefined>(undefined)
 
     const lib_get = async () => {
         if (libs.libraries) {
@@ -24,6 +24,22 @@ const Movie = () => {
         const data = await response.json() as plex_libs
         updateLib(data)
         return libs.libraries
+    }
+
+    const movie_disp = () => {
+        if (undefined === movie) {
+            return (
+                <>
+                    <h3>Loading movie information...</h3>
+                </>
+            )
+        }
+
+        return (
+            <>
+                <h1>{ movie.title }</h1>
+            </>
+        )
     }
 
     lib_get()
@@ -53,13 +69,25 @@ const Movie = () => {
             }
         })
         .then(() => {
-            // TODO: Get movie details
+            if (
+                undefined !== id &&
+                undefined === movie
+            ) {
+                const tmp_movie = libs.movies?.MediaContainer.Metadata.find((movies) => {
+                    if (movies.key.endsWith(id)) {
+                        return movies
+                    }
+                })
+                if (undefined !== tmp_movie) {
+                    setMovie(tmp_movie)
+                }
+            }
         })
         .catch(error => console.error(error))
 
     return (
         <>
-            <div>ID: {id}</div>
+            { movie_disp() }
         </>
     )
 }

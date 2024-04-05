@@ -17,6 +17,7 @@ const Movies = () => {
         updateLib,
         updateMovies
     } = useContext(PlexContext) as plex_libs_context
+
     const lib_get = async () => {
         if (libs.libraries) {
             return libs.libraries

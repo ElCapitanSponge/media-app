@@ -1,36 +1,36 @@
 import { FC, ReactNode, createContext, useState } from "react"
-import { Iplex_libs, plex_libs, plex_libs_context, plex_movies, plex_shows } from "./plex.interfaces.ts"
+import { IPlexState, IPlexLibs, IPlexContext, IPlexMovies, IPlexShows } from "./plex.interfaces.ts"
 
-export const PlexContext = createContext<plex_libs_context | null>(null)
+export const PlexContext = createContext<IPlexContext | null>(null)
 
 const PlexProvider: FC<{
     children: ReactNode
 }> = ({ children }) => {
-    const [libs, setLibs] = useState<Iplex_libs>({
+    const [libs, setLibs] = useState<IPlexState>({
         libraries: undefined,
         movies: undefined,
         shows: undefined
     })
-    const [ movies_id, movies_id_set ] = useState<number | undefined>(undefined)
-    const [ shows_id, shows_id_set ] = useState<number | undefined>(undefined)
+    const [ moviesId, moviesIdSet ] = useState<number | undefined>(undefined)
+    const [ showsId, showsIdSet ] = useState<number | undefined>(undefined)
 
-    const saveLibs = (libs: Iplex_libs) => {
+    const saveLibs = (libs: IPlexState) => {
         setLibs(libs)
     }
 
-    const updateLib = (lib: plex_libs | undefined) => {
+    const updateLib = (lib: IPlexLibs | undefined) => {
         const tmp_libs = libs
         tmp_libs.libraries = lib
         setLibs(tmp_libs)
     }
 
-    const updateMovies = (movies: plex_movies | undefined) => {
+    const updateMovies = (movies: IPlexMovies | undefined) => {
         const tmp_libs = libs
         tmp_libs.movies = movies
         setLibs(tmp_libs)
     }
 
-    const updateShows = (shows: plex_shows | undefined) => {
+    const updateShows = (shows: IPlexShows | undefined) => {
         const tmp_libs = libs
         tmp_libs.shows = shows
         setLibs(tmp_libs)
@@ -39,10 +39,10 @@ const PlexProvider: FC<{
     return (
         <PlexContext.Provider value={{
             libs,
-            movies_id,
-            shows_id,
-            setMoviesId: movies_id_set,
-            setShowsId: shows_id_set,
+            movies_id: moviesId,
+            shows_id: showsId,
+            setMoviesId: moviesIdSet,
+            setShowsId: showsIdSet,
             saveLibs,
             updateLib,
             updateMovies,

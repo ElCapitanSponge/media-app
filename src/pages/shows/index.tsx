@@ -1,5 +1,5 @@
 import Plex, { plex_base } from "@/services/plex.ts"
-import { plex_libs, plex_libs_context, plex_shows } from "@/services/plex.interfaces.ts"
+import { IPlexLibs, IPlexContext, IPlexShows } from "@/services/plex.interfaces.ts"
 import { useContext, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -15,7 +15,7 @@ const Shows = () => {
         setShowsId,
         updateLib,
         updateShows
-    } = useContext(PlexContext) as plex_libs_context
+    } = useContext(PlexContext) as IPlexContext
 
     function show_display() {
         if (undefined === libs.shows) {
@@ -63,8 +63,8 @@ const Shows = () => {
             return libs.libraries
         }
 
-        const response = await Plex.libraries_get()
-        const data = await response.json() as plex_libs
+        const response = await Plex.librariesGet()
+        const data = await response.json() as IPlexLibs
         updateLib(data)
         return libs.libraries
     }
@@ -88,9 +88,9 @@ const Shows = () => {
                     undefined !== shows_id &&
                     undefined === libs.shows
                 ) {
-                    Plex.library_get(shows_id)
+                    Plex.libraryGet(shows_id)
                         .then(response => response.json())
-                        .then((result: plex_shows) => {
+                        .then((result: IPlexShows) => {
                             updateShows(result)
                         })
                         .catch(error => console.error(error))

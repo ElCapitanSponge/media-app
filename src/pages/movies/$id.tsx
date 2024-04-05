@@ -1,6 +1,6 @@
 import Plex from "@/services/plex"
 import { PlexContext } from "@/services/plex.context"
-import { plex_libs, plex_libs_context, plex_movie, plex_movies } from "@/services/plex.interfaces"
+import { IPlexLibs, IPlexContext, IPlexMovie, IPlexMovies } from "@/services/plex.interfaces"
 import { useContext, useState } from "react"
 import { useParams } from "react-router-dom"
 
@@ -12,16 +12,16 @@ const Movie = () => {
         setMoviesId,
         updateLib,
         updateMovies
-    } = useContext(PlexContext) as plex_libs_context
-    const [movie, setMovie] = useState<plex_movie | undefined>(undefined)
+    } = useContext(PlexContext) as IPlexContext
+    const [movie, setMovie] = useState<IPlexMovie | undefined>(undefined)
 
     const lib_get = async () => {
         if (libs.libraries) {
             return libs.libraries
         }
 
-        const response = await Plex.libraries_get()
-        const data = await response.json() as plex_libs
+        const response = await Plex.librariesGet()
+        const data = await response.json() as IPlexLibs
         updateLib(data)
         return libs.libraries
     }
@@ -60,9 +60,9 @@ const Movie = () => {
                 undefined !== movies_id &&
                 undefined === libs.movies
             ) {
-                Plex.library_get(movies_id)
+                Plex.libraryGet(movies_id)
                     .then(response => response.json())
-                    .then((result: plex_movies) => {
+                    .then((result: IPlexMovies) => {
                         updateMovies(result)
                     })
                     .catch(error => console.error(error))

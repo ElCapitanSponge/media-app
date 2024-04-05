@@ -1,5 +1,5 @@
 import Plex, { plex_base } from "@/services/plex.ts"
-import { plex_libs, plex_libs_context, plex_movies } from "@/services/plex.interfaces.ts"
+import { IPlexLibs, IPlexContext, IPlexMovies } from "@/services/plex.interfaces.ts"
 import { useContext, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { to_time } from "@/lib/utils"
@@ -16,15 +16,15 @@ const Movies = () => {
         setMoviesId,
         updateLib,
         updateMovies
-    } = useContext(PlexContext) as plex_libs_context
+    } = useContext(PlexContext) as IPlexContext
 
     const lib_get = async () => {
         if (libs.libraries) {
             return libs.libraries
         }
 
-        const response = await Plex.libraries_get()
-        const data = await response.json() as plex_libs
+        const response = await Plex.librariesGet()
+        const data = await response.json() as IPlexLibs
         updateLib(data)
         return libs.libraries
     }
@@ -93,9 +93,9 @@ const Movies = () => {
                     undefined !== movies_id &&
                     undefined === libs.movies
                 ) {
-                    Plex.library_get(movies_id)
+                    Plex.libraryGet(movies_id)
                         .then(response => response.json())
-                        .then((result: plex_movies) => {
+                        .then((result: IPlexMovies) => {
                             updateMovies(result)
                         })
                         .catch(error => console.error(error))

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button.tsx"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import Plex from "@/services/plex.ts"
-import { plex_libs, plex_libs_context, plex_movies, plex_shows } from "@/services/plex.interfaces.ts"
+import { IPlexLibs, IPlexContext, IPlexMovies, IPlexShows } from "@/services/plex.interfaces.ts"
 import { ChevronRight, Popcorn, TvIcon } from "lucide-react"
 import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
@@ -17,7 +17,7 @@ const Index = () => {
         updateLib,
         updateMovies,
         updateShows
-    } = useContext(PlexContext) as plex_libs_context
+    } = useContext(PlexContext) as IPlexContext
     const [movie_count, set_movie_count] = useState<number>(0)
     const [show_count, set_show_count] = useState<number>(0)
 
@@ -26,8 +26,8 @@ const Index = () => {
             return libs.libraries
         }
 
-        const response = await Plex.libraries_get()
-        const data = await response.json() as plex_libs
+        const response = await Plex.librariesGet()
+        const data = await response.json() as IPlexLibs
         updateLib(data)
         return libs.libraries
     }
@@ -59,9 +59,9 @@ const Index = () => {
             })
             .then(() => {
                 if (undefined !== movies_id) {
-                    Plex.library_get(movies_id)
+                    Plex.libraryGet(movies_id)
                         .then(response => response.json())
-                        .then((result: plex_movies) => {
+                        .then((result: IPlexMovies) => {
                             updateMovies(result)
                             set_movie_count(result.MediaContainer.size)
                         })
@@ -69,9 +69,9 @@ const Index = () => {
                 }
 
                 if (undefined !== shows_id) {
-                    Plex.library_get(shows_id)
+                    Plex.libraryGet(shows_id)
                         .then(response => response.json())
-                        .then((result: plex_shows) => {
+                        .then((result: IPlexShows) => {
                             updateShows(result)
                             set_show_count(result.MediaContainer.size)
                         })

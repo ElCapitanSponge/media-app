@@ -1,4 +1,4 @@
-interface plex_core {
+interface IPlexCore {
     MediaContainer: {
         size: number,
         title1: string,
@@ -7,7 +7,7 @@ interface plex_core {
 }
 
 
-export interface plex_lib {
+export interface IPlexLib {
     Location?: {
         id: number,
         path: string
@@ -34,13 +34,13 @@ export interface plex_lib {
     uuid: string
 }
 
-export interface plex_libs extends plex_core {
-    MediaContainer: plex_core["MediaContainer"] & {
-        Directory: plex_lib[]
+export interface IPlexLibs extends IPlexCore {
+    MediaContainer: IPlexCore["MediaContainer"] & {
+        Directory: IPlexLib[]
     }
 }
 
-export interface plex_movie {
+export interface IPlexMovie {
     Country: {
         tag: string
     }[],
@@ -108,9 +108,9 @@ export interface plex_movie {
     year: number
 }
 
-export interface plex_movies extends plex_core {
-    MediaContainer: plex_core["MediaContainer"] & {
-        Metadata: plex_movie[],
+export interface IPlexMovies extends IPlexCore {
+    MediaContainer: IPlexCore["MediaContainer"] & {
+        Metadata: IPlexMovie[],
         art: string,
         identifier: string,
         librarySectionID: number,
@@ -125,7 +125,7 @@ export interface plex_movies extends plex_core {
     }
 }
 
-export interface plex_show {
+export interface IPlexShow {
     Country: {
         tag: string
     }[],
@@ -160,9 +160,9 @@ export interface plex_show {
     year: number
 }
 
-export interface plex_shows extends plex_core {
-    MediaContainer: plex_core["MediaContainer"] & {
-        Metadata: plex_show[],
+export interface IPlexShows extends IPlexCore {
+    MediaContainer: IPlexCore["MediaContainer"] & {
+        Metadata: IPlexShow[],
         art: string,
         identifier: string,
         librarySectionID: number,
@@ -177,20 +177,20 @@ export interface plex_shows extends plex_core {
     }
 }
 
-export interface Iplex_libs {
-    libraries?: plex_libs,
-    movies?: plex_movies,
-    shows?: plex_shows
+export interface IPlexState {
+    libraries?: IPlexLibs,
+    movies?: IPlexMovies,
+    shows?: IPlexShows
 }
 
-export interface plex_libs_context {
-    libs: Iplex_libs
+export interface IPlexContext {
+    libs: IPlexState
     movies_id: number | undefined
     shows_id: number | undefined
     setMoviesId: (id: number | undefined) => void
     setShowsId: (id: number | undefined) => void
-    saveLibs: (libs: Iplex_libs) => void
-    updateLib: (lib: plex_libs | undefined) => void
-    updateMovies: (movies: plex_movies | undefined) => void
-    updateShows: (shows: plex_shows | undefined) => void
+    saveLibs: (libs: IPlexState) => void
+    updateLib: (lib: IPlexLibs | undefined) => void
+    updateMovies: (movies: IPlexMovies | undefined) => void
+    updateShows: (shows: IPlexShows | undefined) => void
 }

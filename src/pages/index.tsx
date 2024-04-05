@@ -3,11 +3,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Plex from "@/services/plex.ts"
 import { plex_libs, plex_movies, plex_shows } from "@/services/plex.interfaces.ts"
 import { ChevronRight, Popcorn, TvIcon } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { LibraryContext } from "@/App"
 
 const Index = () => {
-
+    const { lib, setLib } = useContext(LibraryContext)
     const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
     const [movies_id, set_movies_id] = useState<undefined | number>(undefined)
     const [shows_id, set_shows_id] = useState<undefined | number>(undefined)

@@ -176,3 +176,9 @@ export interface plex_shows extends plex_core {
         viewMode: number
     }
 }
+
+export interface plex_lib_context {
+    libs?: plex_libs,
+    movies?: plex_movies,
+    shows?: plex_shows
+}

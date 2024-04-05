@@ -177,8 +177,20 @@ export interface plex_shows extends plex_core {
     }
 }
 
-export interface plex_lib_context {
-    libs?: plex_libs,
+export interface Iplex_libs {
+    libraries?: plex_libs,
     movies?: plex_movies,
     shows?: plex_shows
+}
+
+export interface plex_libs_context {
+    libs: Iplex_libs
+    movies_id: number | undefined
+    shows_id: number | undefined
+    setMoviesId: (id: number | undefined) => void
+    setShowsId: (id: number | undefined) => void
+    saveLibs: (libs: Iplex_libs) => void
+    updateLib: (lib: plex_libs | undefined) => void
+    updateMovies: (movies: plex_movies | undefined) => void
+    updateShows: (shows: plex_shows | undefined) => void
 }

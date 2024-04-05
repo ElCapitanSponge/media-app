@@ -1,52 +1,58 @@
 import { Button } from "@/components/ui/button.tsx"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import Plex from "@/services/plex.ts"
-import { plex_libs, plex_movies, plex_shows } from "@/services/plex.interfaces.ts"
+import { plex_libs, plex_libs_context, plex_movies, plex_shows } from "@/services/plex.interfaces.ts"
 import { ChevronRight, Popcorn, TvIcon } from "lucide-react"
 import { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { LibraryContext } from "@/App"
+import { PlexContext } from "@/services/plex.context"
 
 const Index = () => {
-    const { lib, setLib } = useContext(LibraryContext)
-    const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
-    const [movies_id, set_movies_id] = useState<undefined | number>(undefined)
-    const [shows_id, set_shows_id] = useState<undefined | number>(undefined)
+    const {
+        libs,
+        movies_id,
+        shows_id,
+        setMoviesId,
+        setShowsId,
+        updateLib,
+        updateMovies,
+        updateShows
+    } = useContext(PlexContext) as plex_libs_context
     const [movie_count, set_movie_count] = useState<number>(0)
     const [show_count, set_show_count] = useState<number>(0)
 
     const lib_get = async () => {
-        if (lib_response) {
-            return lib_response
+        if (libs.libraries) {
+            return libs.libraries
         }
 
         const response = await Plex.libraries_get()
         const data = await response.json() as plex_libs
-        set_lib_response(data)
-        return lib_response
+        updateLib(data)
+        return libs.libraries
     }
 
     useEffect(() => {
         lib_get()
             .then(() => {
                 if (
-                    undefined !== lib_response &&
+                    undefined !== libs.libraries &&
                     undefined === movies_id
                 ) {
-                    lib_response.MediaContainer.Directory.forEach(itm => {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
                         if ("movie" === itm.type) {
-                            set_movies_id(parseInt(itm.key))
+                            setMoviesId(parseInt(itm.key))
                         }
                     })
                 }
 
                 if (
-                    undefined !== lib_response &&
+                    undefined !== libs.libraries &&
                     undefined === shows_id
                 ) {
-                    lib_response.MediaContainer.Directory.forEach(itm => {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
                         if ("show" === itm.type) {
-                            set_shows_id(parseInt(itm.key))
+                            setShowsId(parseInt(itm.key))
                         }
                     })
                 }
@@ -56,6 +62,7 @@ const Index = () => {
                     Plex.library_get(movies_id)
                         .then(response => response.json())
                         .then((result: plex_movies) => {
+                            updateMovies(result)
                             set_movie_count(result.MediaContainer.size)
                         })
                         .catch(error => console.error(error))
@@ -65,6 +72,7 @@ const Index = () => {
                     Plex.library_get(shows_id)
                         .then(response => response.json())
                         .then((result: plex_shows) => {
+                            updateShows(result)
                             set_show_count(result.MediaContainer.size)
                         })
                         .catch(error => console.error(error))

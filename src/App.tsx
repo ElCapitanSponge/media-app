@@ -1,11 +1,11 @@
-import React, { SetStateAction, useState } from "react"
+import React from "react"
 import {
     createBrowserRouter,
     RouterProvider,
     LoaderFunction,
     ActionFunction,
 } from "react-router-dom"
-import { plex_context } from "./services/plex.types"
+import PlexProvider from "./services/plex.context"
 
 interface RouteCommon {
     loader?: LoaderFunction
@@ -54,15 +54,12 @@ const router = createBrowserRouter(
     }))
 )
 
-export const LibraryContext = React.createContext<plex_context | null>(null)
 
 const App = () => {
-    const [libraries, setLibrary] =  useState<plex_context>()
-
     return (
-        <LibraryContext.Provider value={{ lib: libraries, setLib: setLibrary }}>
+        <PlexProvider>
             <RouterProvider router={router} />
-        </LibraryContext.Provider>
+        </PlexProvider>
     )
 }
 

@@ -1,35 +1,39 @@
 import Plex, { plex_base } from "@/services/plex.ts"
-import { plex_libs, plex_movies } from "@/services/plex.interfaces.ts"
-import { useEffect, useState } from "react"
+import { plex_libs, plex_libs_context, plex_movies } from "@/services/plex.interfaces.ts"
+import { useContext, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { to_time } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
+import { PlexContext } from "@/services/plex.context"
 
 const Movies = () => {
-    const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
-    const [movies_id, set_movies_id] = useState<undefined | number>(undefined)
-    const [movies, set_movies] = useState<undefined | plex_movies>(undefined)
-
+    const {
+        libs,
+        movies_id,
+        setMoviesId,
+        updateLib,
+        updateMovies
+    } = useContext(PlexContext) as plex_libs_context
     const lib_get = async () => {
-        if (lib_response) {
-            return lib_response
+        if (libs.libraries) {
+            return libs.libraries
         }
 
         const response = await Plex.libraries_get()
         const data = await response.json() as plex_libs
-        set_lib_response(data)
-        return lib_response
+        updateLib(data)
+        return libs.libraries
     }
 
     function movies_display() {
-        if (undefined === movies) {
+        if (undefined === libs.movies) {
             return ""
         }
 
-        return movies.MediaContainer.Metadata.map(movie => {
+        return libs.movies.MediaContainer.Metadata.map(movie => {
             const img_src = `${plex_base}${movie.thumb}?X-Plex-Token=${import.meta.env.VITE_PLEX_TOKEN}`
             const tmp_splt = movie.key.split("/")
             const movie_id = tmp_splt[tmp_splt.length - 1]
@@ -73,22 +77,25 @@ const Movies = () => {
         lib_get()
             .then(() => {
                 if (
-                    undefined !== lib_response &&
+                    undefined !== libs.libraries &&
                     undefined === movies_id
                 ) {
-                    lib_response.MediaContainer.Directory.forEach(itm => {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
                         if ("movie" === itm.type) {
-                            set_movies_id(parseInt(itm.key))
+                            setMoviesId(parseInt(itm.key))
                         }
                     })
                 }
             })
             .then(() => {
-                if (undefined !== movies_id) {
+                if (
+                    undefined !== movies_id &&
+                    undefined === libs.movies
+                ) {
                     Plex.library_get(movies_id)
                         .then(response => response.json())
                         .then((result: plex_movies) => {
-                            set_movies(result)
+                            updateMovies(result)
                         })
                         .catch(error => console.error(error))
                 }

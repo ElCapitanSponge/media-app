@@ -1,23 +1,28 @@
 import Plex, { plex_base } from "@/services/plex.ts"
-import { plex_libs, plex_shows } from "@/services/plex.interfaces.ts"
-import { useEffect, useState } from "react"
+import { plex_libs, plex_libs_context, plex_shows } from "@/services/plex.interfaces.ts"
+import { useContext, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
+import { PlexContext } from "@/services/plex.context"
 
 const Shows = () => {
-    const [lib_response, set_lib_response] = useState<undefined | plex_libs>(undefined)
-    const [shows_id, set_shows_id] = useState<undefined | number>(undefined)
-    const [shows, set_shows] = useState<undefined | plex_shows>(undefined)
+    const {
+        libs,
+        shows_id,
+        setShowsId,
+        updateLib,
+        updateShows
+    } = useContext(PlexContext) as plex_libs_context
 
     function show_display() {
-        if (undefined === shows) {
+        if (undefined === libs.shows) {
             return ""
         }
 
-        return shows.MediaContainer.Metadata.map(show => {
+        return libs.shows.MediaContainer.Metadata.map(show => {
             const img_src = `${plex_base}${show.thumb}?X-Plex-Token=${import.meta.env.VITE_PLEX_TOKEN}`
             const tmp_splt = show.key.split("/")
             const show_id = tmp_splt[tmp_splt.length - 2]
@@ -54,36 +59,39 @@ const Shows = () => {
     }
 
     const lib_get = async () => {
-        if (lib_response) {
-            return lib_response
+        if (libs.libraries) {
+            return libs.libraries
         }
 
         const response = await Plex.libraries_get()
         const data = await response.json() as plex_libs
-        set_lib_response(data)
-        return lib_response
+        updateLib(data)
+        return libs.libraries
     }
 
     useEffect(() => {
         lib_get()
             .then(() => {
                 if (
-                    undefined !== lib_response &&
+                    undefined !== libs.libraries &&
                     undefined === shows_id
                 ) {
-                    lib_response.MediaContainer.Directory.forEach(itm => {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
                         if ("show" === itm.type) {
-                            set_shows_id(parseInt(itm.key))
+                            setShowsId(parseInt(itm.key))
                         }
                     })
                 }
             })
             .then(() => {
-                if (undefined !== shows_id) {
+                if (
+                    undefined !== shows_id &&
+                    undefined === libs.shows
+                ) {
                     Plex.library_get(shows_id)
                         .then(response => response.json())
                         .then((result: plex_shows) => {
-                            set_shows(result)
+                            updateShows(result)
                         })
                         .catch(error => console.error(error))
                 }

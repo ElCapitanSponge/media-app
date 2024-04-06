@@ -1,6 +1,6 @@
 import Plex, { plex_base } from "@/services/plex.ts"
 import { IPlexLibs, IPlexContext, IPlexMovies } from "@/services/plex.interfaces.ts"
-import { useContext, useEffect } from "react"
+import { ReactNode, useContext, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { to_time } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -18,6 +18,8 @@ const Movies = () => {
         updateMovies
     } = useContext(PlexContext) as IPlexContext
 
+    const content = useRef<ReactNode>(movies_display(libs.movies))
+
     const lib_get = async () => {
         if (libs.libraries) {
             return libs.libraries
@@ -29,12 +31,12 @@ const Movies = () => {
         return libs.libraries
     }
 
-    function movies_display() {
-        if (undefined === libs.movies) {
+    function movies_display(movies: undefined | IPlexMovies) {
+        if (undefined === movies) {
             return ""
         }
 
-        return libs.movies.MediaContainer.Metadata.map(movie => {
+        return movies.MediaContainer.Metadata.map(movie => {
             const img_src = `${plex_base}${movie.thumb}?X-Plex-Token=${import.meta.env.VITE_PLEX_TOKEN}`
             const tmp_splt = movie.key.split("/")
             const movie_id = tmp_splt[tmp_splt.length - 1]
@@ -75,40 +77,42 @@ const Movies = () => {
     }
 
     useEffect(() => {
-        lib_get()
-            .then(() => {
-                if (
-                    undefined !== libs.libraries &&
-                    undefined === movies_id
-                ) {
-                    libs.libraries.MediaContainer.Directory.forEach(itm => {
-                        if ("movie" === itm.type) {
-                            setMoviesId(parseInt(itm.key))
-                        }
+        content.current = movies_display(libs.movies)
+    }, [libs])
+
+    lib_get()
+        .then(() => {
+            if (
+                undefined !== libs.libraries &&
+                undefined === movies_id
+            ) {
+                libs.libraries.MediaContainer.Directory.forEach(itm => {
+                    if ("movie" === itm.type) {
+                        setMoviesId(parseInt(itm.key))
+                    }
+                })
+            }
+        })
+        .then(() => {
+            if (
+                undefined !== movies_id &&
+                undefined === libs.movies
+            ) {
+                Plex.libraryGet(movies_id)
+                    .then(response => response.json())
+                    .then((result: IPlexMovies) => {
+                        updateMovies(result)
                     })
-                }
-            })
-            .then(() => {
-                if (
-                    undefined !== movies_id &&
-                    undefined === libs.movies
-                ) {
-                    Plex.libraryGet(movies_id)
-                        .then(response => response.json())
-                        .then((result: IPlexMovies) => {
-                            updateMovies(result)
-                        })
-                        .catch(error => console.error(error))
-                }
-            })
-            .catch(error => console.error(error))
-    })
+                    .catch(error => console.error(error))
+            }
+        })
+        .catch(error => console.error(error))
 
     return (
         <>
             <h1 className="text-6xl flex justify-center mb-6 mt-6">Movie Collection</h1>
             <div className="flex flex-wrap justify-evenly gap-1">
-                {movies_display()}
+                {content.current}
             </div>
         </>
     )

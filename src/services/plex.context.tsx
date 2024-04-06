@@ -6,7 +6,7 @@ export const PlexContext = createContext<IPlexContext | null>(null)
 const PlexProvider: FC<{
     children: ReactNode
 }> = ({ children }) => {
-    const [libs, setLibs] = useState<IPlexState>({
+    const [ libs, setLibs ] = useState<IPlexState>({
         libraries: undefined,
         movies: undefined,
         shows: undefined

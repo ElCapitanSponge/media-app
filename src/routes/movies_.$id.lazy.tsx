@@ -1,11 +1,11 @@
+import { createLazyFileRoute } from "@tanstack/react-router"
 import Plex from "@/services/plex"
 import { PlexContext } from "@/services/plex.context"
 import { IPlexLibs, IPlexContext, IPlexMovie, IPlexMovies } from "@/services/plex.interfaces"
 import { useContext, useState } from "react"
-import { useParams } from "react-router-dom"
 
 const Movie = () => {
-    const { id } = useParams()
+    const id = parseInt(Route.useParams().id as string)
     const {
         libs,
         movies_id,
@@ -92,4 +92,6 @@ const Movie = () => {
     )
 }
 
-export default Movie
+export const Route = createLazyFileRoute("/movies/$id")({
+    component: Movie
+})

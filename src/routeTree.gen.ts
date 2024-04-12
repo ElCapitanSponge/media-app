@@ -40,14 +40,14 @@ const IndexLazyRoute = IndexLazyImport.update({
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const ShowsIdLazyRoute = ShowsIdLazyImport.update({
-  path: '/$id',
-  getParentRoute: () => ShowsLazyRoute,
-} as any).lazy(() => import('./routes/shows.$id.lazy').then((d) => d.Route))
+  path: '/shows/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/shows_.$id.lazy').then((d) => d.Route))
 
 const MoviesIdLazyRoute = MoviesIdLazyImport.update({
-  path: '/$id',
-  getParentRoute: () => MoviesLazyRoute,
-} as any).lazy(() => import('./routes/movies.$id.lazy').then((d) => d.Route))
+  path: '/movies/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/movies_.$id.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -67,11 +67,11 @@ declare module '@tanstack/react-router' {
     }
     '/movies/$id': {
       preLoaderRoute: typeof MoviesIdLazyImport
-      parentRoute: typeof MoviesLazyImport
+      parentRoute: typeof rootRoute
     }
     '/shows/$id': {
       preLoaderRoute: typeof ShowsIdLazyImport
-      parentRoute: typeof ShowsLazyImport
+      parentRoute: typeof rootRoute
     }
   }
 }
@@ -80,8 +80,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  MoviesLazyRoute.addChildren([MoviesIdLazyRoute]),
-  ShowsLazyRoute.addChildren([ShowsIdLazyRoute]),
+  MoviesLazyRoute,
+  ShowsLazyRoute,
+  MoviesIdLazyRoute,
+  ShowsIdLazyRoute,
 ])
 
 /* prettier-ignore-end */

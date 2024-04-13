@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Plex from "@/services/plex.ts"
 import { IPlexLibs, IPlexContext, IPlexMovies, IPlexShows } from "@/services/plex.interfaces.ts"
 import { ChevronRight, Popcorn, TvIcon } from "lucide-react"
-import { useContext, useState } from "react"
+import { memo, useContext, useEffect, useState } from "react"
 import { PlexContext } from "@/services/plex.context"
 
 const Index = () => {
@@ -21,62 +21,65 @@ const Index = () => {
     const [movie_count, set_movie_count] = useState<number>(0)
     const [show_count, set_show_count] = useState<number>(0)
 
-    const lib_get = async () => {
-        if (libs.libraries) {
+    useEffect(() => {
+        const lib_get = async () => {
+            if (libs.libraries) {
+                return libs.libraries
+            }
+
+            const response = await Plex.librariesGet()
+            const data = await response.json() as IPlexLibs
+            updateLib(data)
             return libs.libraries
         }
-
-        const response = await Plex.librariesGet()
-        const data = await response.json() as IPlexLibs
-        updateLib(data)
-        return libs.libraries
-    }
-    lib_get()
-        .then(() => {
-            if (
-                undefined !== libs.libraries &&
-                undefined === movies_id
-            ) {
-                libs.libraries.MediaContainer.Directory.forEach(itm => {
-                    if ("movie" === itm.type) {
-                        setMoviesId(parseInt(itm.key))
-                    }
-                })
-            }
-
-            if (
-                undefined !== libs.libraries &&
-                undefined === shows_id
-            ) {
-                libs.libraries.MediaContainer.Directory.forEach(itm => {
-                    if ("show" === itm.type) {
-                        setShowsId(parseInt(itm.key))
-                    }
-                })
-            }
-        })
-        .then(() => {
-            if (undefined !== movies_id) {
-                Plex.libraryGet(movies_id)
-                    .then(response => response.json())
-                    .then((result: IPlexMovies) => {
-                        updateMovies(result)
-                        set_movie_count(result.MediaContainer.size)
+        lib_get()
+            .then(() => {
+                if (
+                    undefined !== libs.libraries &&
+                    undefined === movies_id
+                ) {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
+                        if ("movie" === itm.type) {
+                            setMoviesId(parseInt(itm.key))
+                        }
                     })
-                    .catch(error => console.error(error))
-            }
+                }
 
-            if (undefined !== shows_id) {
-                Plex.libraryGet(shows_id)
-                    .then(response => response.json())
-                    .then((result: IPlexShows) => {
-                        updateShows(result)
-                        set_show_count(result.MediaContainer.size)
+                if (
+                    undefined !== libs.libraries &&
+                    undefined === shows_id
+                ) {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
+                        if ("show" === itm.type) {
+                            setShowsId(parseInt(itm.key))
+                        }
                     })
-                    .catch(error => console.error(error))
-            }
-        })
-        .catch(error => console.error(error))
+                }
+            })
+            .then(() => {
+                if (undefined !== movies_id) {
+                    Plex.libraryGet(movies_id)
+                        .then(response => response.json())
+                        .then((result: IPlexMovies) => {
+                            updateMovies(result)
+                            set_movie_count(result.MediaContainer.size)
+                        })
+                        .catch(error => console.error(error))
+                }
+
+                if (undefined !== shows_id) {
+                    Plex.libraryGet(shows_id)
+                        .then(response => response.json())
+                        .then((result: IPlexShows) => {
+                            updateShows(result)
+                            set_show_count(result.MediaContainer.size)
+                        })
+                        .catch(error => console.error(error))
+                }
+            })
+            .catch(error => console.error(error))
+    }, [libs, movies_id, setMoviesId, shows_id, setShowsId, updateLib, updateMovies, updateShows])
+
     return (
         <>
             <h1 className="text-6xl flex justify-center mb-6 mt-6">Plex Library Viewer</h1>
@@ -124,5 +127,5 @@ const Index = () => {
 }
 
 export const Route = createLazyFileRoute("/")({
-    component: Index
+    component: memo(Index)
 })

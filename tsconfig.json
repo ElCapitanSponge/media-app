@@ -26,7 +26,17 @@
             "@/*": [
                 "./src/*"
             ]
-        }
+        },
+        "importHelpers": true,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "skipDefaultLibCheck": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitOverride": true
     },
     "include": [
         "src/**/*"

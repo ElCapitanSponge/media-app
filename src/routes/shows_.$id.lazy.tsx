@@ -17,74 +17,76 @@ const Show = () => {
     const [details, setDetails] = useState<ReactNode>("")
 
     useEffect(() => {
-    const lib_get = async () => {
-        if (libs.libraries) {
+        const lib_get = async () => {
+            if (libs.libraries) {
+                return libs.libraries
+            }
+
+            const response = await Plex.librariesGet()
+            const data = await response.json() as IPlexLibs
+            updateLib(data)
             return libs.libraries
         }
 
-        const response = await Plex.librariesGet()
-        const data = await response.json() as IPlexLibs
-        updateLib(data)
-        return libs.libraries
-    }
+        const show_disp = () => {
+            if (undefined === show) {
+                return (
+                    <>
+                        <h3>Loading show information...</h3>
+                    </>
+                )
+            }
 
-    const show_disp = () => {
-        if (undefined === show) {
+            console.log("show", show)
+
             return (
                 <>
-                    <h3>Loading show information...</h3>
+                    <h1>{show.title}</h1>
                 </>
             )
         }
 
-        return (
-            <>
-                <h1>{show.title}</h1>
-            </>
-        )
-    }
-
-    lib_get()
-        .then(() => {
-            if (
-                undefined !== libs.libraries &&
-                undefined === shows_id
-            ) {
-                libs.libraries.MediaContainer.Directory.forEach(itm => {
-                    if ("show" === itm.type) {
-                        setShowsId(parseInt(itm.key))
-                    }
-                })
-            }
-        })
-        .then(() => {
-            if (
-                undefined !== shows_id
-            ) {
-                Plex.libraryGet(shows_id)
-                    .then(response => response.json())
-                    .then((result: IPlexShows) => {
-                        updateShows(result)
+        lib_get()
+            .then(() => {
+                if (
+                    undefined !== libs.libraries &&
+                    undefined === shows_id
+                ) {
+                    libs.libraries.MediaContainer.Directory.forEach(itm => {
+                        if ("show" === itm.type) {
+                            setShowsId(parseInt(itm.key))
+                        }
                     })
-                    .catch(error => console.error(error))
-            }
-        })
-        .then(() => {
-            if (
-                undefined !== id
-            ) {
-                const tmp_show = libs.shows?.MediaContainer.Metadata.find((shows) => {
-                    const tmp_split = shows.key.split("/")
-                    const tmp_id = tmp_split[tmp_split.length - 2]
-                    if (tmp_id === id.toString()) {
-                        return shows
-                    }
-                })
-                setShow(tmp_show)
-                setDetails(show_disp())
-            }
-        })
-        .catch(error => console.error(error))
+                }
+            })
+            .then(() => {
+                if (
+                    undefined !== shows_id
+                ) {
+                    Plex.libraryGet(shows_id)
+                        .then(response => response.json())
+                        .then((result: IPlexShows) => {
+                            updateShows(result)
+                        })
+                        .catch(error => console.error(error))
+                }
+            })
+            .then(() => {
+                if (
+                    undefined !== id
+                ) {
+                    const tmp_show = libs.shows?.MediaContainer.Metadata.find((shows) => {
+                        const tmp_split = shows.key.split("/")
+                        const tmp_id = tmp_split[tmp_split.length - 2]
+                        if (tmp_id === id.toString()) {
+                            return shows
+                        }
+                    })
+                    setShow(tmp_show)
+                    setDetails(show_disp())
+                }
+            })
+            .catch(error => console.error(error))
     }, [id, libs, updateLib, updateShows, setShowsId, show, shows_id])
 
     return (

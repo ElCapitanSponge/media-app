@@ -1,10 +1,10 @@
+import { Link, createLazyFileRoute } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button.tsx"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card.tsx"
 import Plex from "@/services/plex.ts"
 import { IPlexLibs, IPlexContext, IPlexMovies, IPlexShows } from "@/services/plex.interfaces.ts"
 import { ChevronRight, Popcorn, TvIcon } from "lucide-react"
-import { useContext, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { memo, useContext, useEffect, useState } from "react"
 import { PlexContext } from "@/services/plex.context"
 
 const Index = () => {
@@ -21,18 +21,17 @@ const Index = () => {
     const [movie_count, set_movie_count] = useState<number>(0)
     const [show_count, set_show_count] = useState<number>(0)
 
-    const lib_get = async () => {
-        if (libs.libraries) {
+    useEffect(() => {
+        const lib_get = async () => {
+            if (libs.libraries) {
+                return libs.libraries
+            }
+
+            const response = await Plex.librariesGet()
+            const data = await response.json() as IPlexLibs
+            updateLib(data)
             return libs.libraries
         }
-
-        const response = await Plex.librariesGet()
-        const data = await response.json() as IPlexLibs
-        updateLib(data)
-        return libs.libraries
-    }
-
-    useEffect(() => {
         lib_get()
             .then(() => {
                 if (
@@ -79,8 +78,7 @@ const Index = () => {
                 }
             })
             .catch(error => console.error(error))
-    })
-
+    }, [libs, movies_id, setMoviesId, shows_id, setShowsId, updateLib, updateMovies, updateShows])
 
     return (
         <>
@@ -128,4 +126,6 @@ const Index = () => {
     )
 }
 
-export default Index
+export const Route = createLazyFileRoute("/")({
+    component: memo(Index)
+})

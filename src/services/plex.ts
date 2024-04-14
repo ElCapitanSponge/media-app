@@ -11,7 +11,10 @@ const plexRequestOptions: RequestInit = {
 }
 
 const plexImageHeader = new Headers()
-plexImageHeader.append("X-Plex-Token", import.meta.env.VITE_PLEX_TOKEN as string)
+plexImageHeader.append(
+    "X-Plex-Token",
+    import.meta.env.VITE_PLEX_TOKEN as string
+)
 
 const plexImageRequestOptions: RequestInit = {
     method: "GET",
@@ -25,13 +28,19 @@ const Plex = {
         return fetch(`${plex_base}/library/sections/`, plexRequestOptions)
     },
     libraryGet: (lib_id: number) => {
-        return fetch(`${plex_base}/library/sections/${lib_id}/all`, plexRequestOptions)
+        return fetch(
+            `${plex_base}/library/sections/${lib_id}/all`,
+            plexRequestOptions
+        )
     },
     thumbnailGet: (thumb: string) => {
         if ("/" !== Array.from(thumb)[0]) {
             thumb = `/${thumb}`
         }
         return fetch(`${plex_base}${thumb}`, plexImageRequestOptions)
+    },
+    contentGet: (key: string) => {
+        return fetch(`${plex_base}${key}`, plexRequestOptions)
     }
 }
 

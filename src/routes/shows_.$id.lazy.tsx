@@ -1,6 +1,6 @@
 import Plex from "@/services/plex"
 import { PlexContext } from "@/services/plex.context"
-import { IPlexContext, IPlexLibs, IPlexShow, IPlexShows } from "@/services/plex.interfaces"
+import { IPlexLibs, IPlexShow, IPlexShows } from "@/services/plex.interfaces"
 import { createLazyFileRoute } from "@tanstack/react-router"
 import { ReactNode, memo, useContext, useEffect, useState } from "react"
 
@@ -15,6 +15,7 @@ const Show = () => {
     } = useContext(PlexContext)!
     const [show, setShow] = useState<IPlexShow | undefined>(undefined)
     const [details, setDetails] = useState<ReactNode>("")
+    const [showDetails, setShowDetails] = useState()
 
     useEffect(() => {
         const lib_get = async () => {
@@ -28,8 +29,10 @@ const Show = () => {
             return libs.libraries
         }
 
+        const episodesGet = async (type: string, title: string, key: string) => {}
+
         const show_disp = () => {
-            if (undefined === show) {
+            if (undefined === show || undefined === showDetails) {
                 return (
                     <>
                         <h3>Loading show information...</h3>
@@ -38,6 +41,7 @@ const Show = () => {
             }
 
             console.log("show", show)
+            console.log("show details", showDetails)
 
             return (
                 <>
@@ -75,17 +79,26 @@ const Show = () => {
                 if (
                     undefined !== id
                 ) {
-                    const tmp_show = libs.shows?.MediaContainer.Metadata.find(shows => {
-                        const tmp_split = shows.key.split("/")
-                        const tmp_id = tmp_split[tmp_split.length - 2]
-                        if (tmp_id === id.toString()) {
-                            return shows
-                        }
-                    })
+                    const tmp_show = libs.shows?.MediaContainer.Metadata
+                        .find(shows => {
+                            const tmp_split = shows.key.split("/")
+                            const tmp_id = tmp_split[tmp_split.length - 2]
+                            if (tmp_id === id.toString()) {
+                                return shows
+                            }
+                        })
                     setShow(tmp_show)
-                    setDetails(show_disp())
                 }
             })
+            .then(() => {
+                if (undefined !== show?.key) {
+                    Plex.contentGet(show.key)
+                        .then(response => response.json())
+                        .then(result => setShowDetails(result))
+                        .catch(error => console.error(error))
+                }
+            })
+            .then(() => setDetails(show_disp()))
             .catch(error => console.error(error))
     }, [id, libs, updateLib, updateShows, setShowsId, show, shows_id])
 

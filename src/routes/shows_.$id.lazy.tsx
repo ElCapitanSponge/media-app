@@ -5,14 +5,14 @@ import { createLazyFileRoute } from "@tanstack/react-router"
 import { ReactNode, memo, useContext, useEffect, useState } from "react"
 
 const Show = () => {
-    const id = parseInt(Route.useParams().id as string)
+    const id = parseInt(Route.useParams().id)
     const {
         libs,
         shows_id,
         setShowsId,
         updateLib,
         updateShows
-    } = useContext(PlexContext) as IPlexContext
+    } = useContext(PlexContext)!
     const [show, setShow] = useState<IPlexShow | undefined>(undefined)
     const [details, setDetails] = useState<ReactNode>("")
 
@@ -75,7 +75,7 @@ const Show = () => {
                 if (
                     undefined !== id
                 ) {
-                    const tmp_show = libs.shows?.MediaContainer.Metadata.find((shows) => {
+                    const tmp_show = libs.shows?.MediaContainer.Metadata.find(shows => {
                         const tmp_split = shows.key.split("/")
                         const tmp_id = tmp_split[tmp_split.length - 2]
                         if (tmp_id === id.toString()) {

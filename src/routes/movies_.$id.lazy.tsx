@@ -5,14 +5,14 @@ import { IPlexLibs, IPlexContext, IPlexMovie, IPlexMovies } from "@/services/ple
 import { ReactNode, memo, useContext, useEffect, useState } from "react"
 
 const Movie = () => {
-    const id = parseInt(Route.useParams().id as string)
+    const id = parseInt(Route.useParams().id)
     const {
         libs,
         movies_id,
         setMoviesId,
         updateLib,
         updateMovies
-    } = useContext(PlexContext) as IPlexContext
+    } = useContext(PlexContext)!
     const [movie, setMovie] = useState<IPlexMovie | undefined>(undefined)
     const [details, setDetails] = useState<ReactNode>("")
 
@@ -73,7 +73,7 @@ const Movie = () => {
                 if (
                     undefined !== id
                 ) {
-                    const tmp_movie = libs.movies?.MediaContainer.Metadata.find((movies) => {
+                    const tmp_movie = libs.movies?.MediaContainer.Metadata.find(movies => {
                         if (movies.key.endsWith(id.toString())) {
                             return movies
                         }

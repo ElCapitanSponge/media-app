@@ -16,7 +16,7 @@ const Shows = () => {
         setShowsId,
         updateLib,
         updateShows
-    } = useContext(PlexContext) as IPlexContext
+    } = useContext(PlexContext)!
 
     const [content, setContent] = useState<ReactNode>()
 

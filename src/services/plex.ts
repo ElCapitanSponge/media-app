@@ -1,6 +1,6 @@
 export const plex_base = `http://${import.meta.env.VITE_PLEX_ADDRESS}:${import.meta.env.VITE_PLEX_PORT}`
 
-const plexHeader = new Headers();
+const plexHeader = new Headers()
 plexHeader.append("Accept", "application/json")
 plexHeader.append("X-Plex-Token", import.meta.env.VITE_PLEX_TOKEN as string)
 

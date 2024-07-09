@@ -51,7 +51,7 @@ module.exports = {
 			"error",
 			{ before: false, after: true }
 		],
-		"@stylistic/ts/indent": ["error", 4],
+		"@stylistic/ts/indent": ["error", "tab"],
 		"@stylistic/ts/no-extra-parens": "error",
 		"@stylistic/ts/quotes": ["error", "double"],
 		"@stylistic/ts/semi": ["error", "never"]

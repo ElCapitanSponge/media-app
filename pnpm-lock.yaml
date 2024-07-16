@@ -40,9 +40,6 @@ dependencies:
   react-router-dom:
     specifier: ^6.24.1
     version: 6.24.1(react-dom@18.2.0)(react@18.2.0)
-  redux:
-    specifier: ^5.0.1
-    version: 5.0.1
   sort-by:
     specifier: ^1.2.0
     version: 1.2.0
@@ -114,12 +111,6 @@ devDependencies:
   eslint-plugin-react-refresh:
     specifier: ^0.4.6
     version: 0.4.6(eslint@8.57.0)
-  redux-devtools-extension:
-    specifier: ^2.13.9
-    version: 2.13.9(redux@5.0.1)
-  redux-thunk:
-    specifier: ^3.1.0
-    version: 3.1.0(redux@5.0.1)
   typescript:
     specifier: ^5.4.3
     version: 5.4.3
@@ -3632,15 +3623,6 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: false
-
-  /redux-devtools-extension@2.13.9(redux@5.0.1):
-    resolution: {integrity: sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==}
-    deprecated: Package moved to @redux-devtools/extension.
-    peerDependencies:
-      redux: ^3.1.0 || ^4.0.0
-    dependencies:
-      redux: 5.0.1
-    dev: true
 
   /redux-thunk@3.1.0(redux@5.0.1):
     resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}

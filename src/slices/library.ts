@@ -1,10 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { PlexLibrary } from "@/lib/types/plexLibrary"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+
+export interface LibraryState {
+	libraries: PlexLibrary[]
+}
+
+const initialState: LibraryState = {
+	libraries: []
+}
 
 const librarySlice = createSlice({
 	name: "library",
-	initialState: { libraries: [] },
+	initialState,
 	reducers: {
-		addLibrary: (state, action) => {
+		addLibrary: (state, action: PayloadAction<PlexLibrary>) => {
 			state.libraries.push(action.payload)
 		}
 	}

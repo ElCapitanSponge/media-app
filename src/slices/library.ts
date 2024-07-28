@@ -1,4 +1,4 @@
-import { PlexLibrary } from "@/lib/types/plexLibrary"
+import { PlexLibrary } from "../lib/interfaces/plexLibrary.ts"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export interface LibraryState {
@@ -20,4 +20,7 @@ const librarySlice = createSlice({
 })
 
 export const { addLibrary } = librarySlice.actions
+export const selectLibraries = (state: { library: LibraryState }) => {
+	return state.library.libraries
+}
 export default librarySlice.reducer

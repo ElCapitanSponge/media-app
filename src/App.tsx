@@ -3,8 +3,10 @@ import { useGetLibrariesQuery } from "./services/plex.ts"
 
 const App = () => {
 
-	const { data, error, isLoading } = useGetLibrariesQuery(null)
+	const { data, error, isLoading } = useGetLibrariesQuery()
 
+	console.log(data)
+	console.log(error)
 	return (
 		<>
 			<div>

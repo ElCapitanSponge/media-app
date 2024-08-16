@@ -13,13 +13,18 @@ const librarySlice = createSlice({
 	name: "library",
 	initialState,
 	reducers: {
-		addLibrary: (state, action: PayloadAction<PlexLibrary>) => {
+		createUpdateLibrary: (state, action: PayloadAction<PlexLibrary>) => {
+			const index = state.libraries.findIndex(library => library.key === action.payload.key)
+			if (index !== -1) {
+				state.libraries[index] = action.payload
+				return
+			}
 			state.libraries.push(action.payload)
 		}
 	}
 })
 
-export const { addLibrary } = librarySlice.actions
+export const { createUpdateLibrary } = librarySlice.actions
 export const selectLibraries = (state: { library: LibraryState }) => {
 	return state.library.libraries
 }

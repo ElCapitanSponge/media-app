@@ -1,25 +1,32 @@
 import React from "react"
 import { useGetLibrariesQuery } from "./services/plex.ts"
+import { useAppDispatch, useAppSelector } from "./hooks.ts"
+import { createUpdateLibrary } from "./slices/library.ts"
 
 const App = () => {
-
+	const libraries = useAppSelector((state) => state.libraries.libraries)
+	const dispatch = useAppDispatch()
 	const { data, error, isLoading } = useGetLibrariesQuery()
 
-	console.log(data)
-	console.log(error)
+	if (!error) {
+		data?.mediaContainer.directory.map(library => {
+			dispatch(createUpdateLibrary(library))
+		})
+	}
+
 	return (
 		<>
 			<div>
-				{error ? (
-					<>Oh no, there was an error</>
-				) : isLoading ? (
+				{isLoading ? (
 					<>Loading...</>
-				) : data ? (
+				) : libraries.length === 0 ? (
+					<>No libraries found</>
+				) : libraries.length > 0 ? (
 					<>
 						<h1>Libraries</h1>
 						<ul>
-							{data.payload.map((library) => (
-								<li key={library.id}>{library.title}</li>
+							{libraries.map(library => (
+								<li key={library.key}>{library.title}</li>
 							))}
 						</ul>
 					</>

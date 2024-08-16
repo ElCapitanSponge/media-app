@@ -1,5 +1,5 @@
 export interface PlexLibraryPayload {
-	directory: PlexLibrary
+	directory: PlexLibrary[]
 }
 
 export interface PlexLibrary {

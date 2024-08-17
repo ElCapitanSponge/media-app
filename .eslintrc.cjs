@@ -54,6 +54,7 @@ module.exports = {
 		"@stylistic/ts/indent": ["error", "tab"],
 		"@stylistic/ts/no-extra-parens": "error",
 		"@stylistic/ts/quotes": ["error", "double"],
-		"@stylistic/ts/semi": ["error", "never"]
+		"@stylistic/ts/semi": ["error", "never"],
+		"react/prop-types": "off",
 	},
 }

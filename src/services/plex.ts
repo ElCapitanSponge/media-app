@@ -6,7 +6,7 @@ import { PlexMoviesPayload } from "../lib/interfaces/plexMovies.ts"
 export const plexApi = createApi({
 	reducerPath: "plexApi",
 	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5014/plex/" }),
-	endpoints: (builder) => ({
+	endpoints: builder => ({
 		getLibraries: builder.query<PlexPayload<PlexLibraryPayload>, void>({
 			query: () => "libraries"
 		}),

@@ -1,3 +1,5 @@
+import { LibraryType } from "../enums/plexCommon"
+
 export interface PlexLibraryPayload {
 	directory: PlexLibrary[]
 }
@@ -24,7 +26,7 @@ export interface PlexLibrary {
 	scanner: string,
 	thumb: string,
 	title: string,
-	type: string,
+	type: LibraryType,
 	updatedAt: number,
 	uuid: string
 }

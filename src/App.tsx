@@ -28,10 +28,11 @@ const App = () => {
 				<div className="flex flex-wrap justify-around">
 					{libraries.map(library =>
 						<LibraryCard
-							key={library.key}
+							key={library.uuid}
 							title={library.title}
-							thumbnail={library.thumb}
 							description={library.type}
+							type={library.type}
+							libraryId={library.key}
 							className="mb-4 w-1/4"
 						/>
 					)}

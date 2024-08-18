@@ -37,25 +37,30 @@ const librarySlice = createSlice({
 export const {
 	createUpdateLibrary
 } = librarySlice.actions
+
 export const selectLibraries = (state: { library: LibraryState }) => {
 	return state.library.libraries
 }
+
 export const getMovieLibraries = (state: { library: LibraryState }) => {
 	return libraryFilter(
 		state.library.libraries,
 		LibraryType.Movie
 	)
 }
+
 export const getShowLibraries = (state: { library: LibraryState }) => {
 	return libraryFilter(
 		state.library.libraries,
 		LibraryType.Show
 	)
 }
+
 export const getMusicLibraries = (state: { library: LibraryState }) => {
 	return libraryFilter(
 		state.library.libraries,
 		LibraryType.Music
 	)
 }
+
 export default librarySlice.reducer

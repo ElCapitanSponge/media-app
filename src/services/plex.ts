@@ -18,7 +18,7 @@ export const plexApi = createApi({
 			transformResponse: (response, _, arg) => {
 				const tmpPath: string = arg as unknown as string
 				const fileType = tmpPath.split(".").pop()
-				const encodedImage = response as unknown as string
+				const encodedImage = response as string
 				return `data:image/${fileType};base64,${encodedImage}`
 			}
 		})

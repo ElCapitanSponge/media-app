@@ -1,33 +1,64 @@
-import { useGetImageQuery } from "@/services/plex"
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle
-} from "../ui/card"
-import { useEffect, useState } from "react"
+} from "../ui/card.tsx"
+import { LibraryType } from "@/lib/enums/plexCommon.ts"
+import { LibraryCardMovie } from "./libraryCardMovie.tsx"
+import { LibraryCardMusic } from "./libraryCardMusic.tsx"
+import { LibraryCardShow } from "./libraryCardShow.tsx"
 
-export function LibraryCard({ title, description, thumbnail, ...props }) {
-	const { data } = useGetImageQuery(thumbnail as string)
+interface LibraryCardProps {
+	libraryId: string,
+	title: string,
+	description: string,
+	type: LibraryType
+}
 
-	const [image, setImage] = useState<JSX.Element | null>(<></>)
-
-	useEffect(() => {
-		if (data) {
-			setImage(<>
-				<img src={data} />
-			</>)
-		}
-	}, [data])
+export function LibraryCard(
+	{
+		libraryId,
+		title,
+		description,
+		type,
+		...props
+	}: LibraryCardProps
+) {
+	const iconSize = 24
 
 	return (
-		<Card {...props}>
-			<CardHeader>
-				<CardTitle>{image} {title}</CardTitle>
-				<CardDescription>{description}</CardDescription>
-			</CardHeader>
-			<CardContent>Content Here...</CardContent>
-		</Card>
+		type === LibraryType.Movie ?
+			<LibraryCardMovie
+				libraryId={libraryId}
+				title={title}
+				description={description}
+				iconSize={iconSize}
+				{...props}
+			/> :
+			type === LibraryType.Music ?
+				<LibraryCardMusic
+					libraryId={libraryId}
+					title={title}
+					description={description}
+					iconSize={iconSize}
+					{...props}
+				/> :
+				type === LibraryType.Show ?
+					<LibraryCardShow
+						libraryId={libraryId}
+						title={title}
+						description={description}
+						iconSize={iconSize}
+						{...props}
+					/> :
+					<Card {...props}>
+						<CardHeader>
+							<CardTitle className="flex gap-4">{title}</CardTitle>
+							<CardDescription>{description}</CardDescription>
+						</CardHeader>
+						<CardContent>{content}</CardContent>
+					</Card>
 	)
 }

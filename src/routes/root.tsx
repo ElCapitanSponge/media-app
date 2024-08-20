@@ -1,10 +1,10 @@
-import { useGetLibrariesQuery } from "./services/plex.ts"
-import { useAppDispatch, useAppSelector } from "./hooks.ts"
-import { createUpdateLibrary } from "./slices/library.ts"
-import { LibraryCard } from "./components/plex/librayCard.tsx"
+import { useGetLibrariesQuery } from "@/services/plex.ts"
+import { useAppDispatch, useAppSelector } from "@/hooks.ts"
+import { createUpdateLibrary } from "@/slices/library.ts"
+import { LibraryCard } from "@/components/plex/librayCard.tsx"
 import { useEffect, useState } from "react"
 
-const App = () => {
+const Root = () => {
 	const libraries = useAppSelector(state => state.libraries.libraries)
 	const dispatch = useAppDispatch()
 	const { data, error, isLoading } = useGetLibrariesQuery()
@@ -53,4 +53,4 @@ const App = () => {
 	)
 }
 
-export default App
+export default Root

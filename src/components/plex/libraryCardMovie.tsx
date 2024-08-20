@@ -44,17 +44,18 @@ export function LibraryCardMovie(
 		}))
 	}
 
-	console.log(movies)
 
 	useEffect(() => {
+		const movieCount = movies
+			.filter(movie => movie.library === libraryId).length
 		if (isLoading) {
 			setContent(<div>Loading...</div>)
-		} else if (movies === undefined) {
+		} else if (movies === undefined || movieCount === 0) {
 			setContent(<div>No movies</div>)
 		} else {
-			setContent(<div>{movies.length} movies</div>)
+			setContent(<div>{movieCount} movies</div>)
 		}
-	}, [movies, isLoading, setContent])
+	}, [movies, isLoading, setContent, libraryId])
 
 	return (
 		<Card {...props}>

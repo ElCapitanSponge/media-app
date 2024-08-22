@@ -6,9 +6,9 @@ import {
 	CardTitle
 } from "../ui/card.tsx"
 import { LibraryType } from "@/lib/enums/plexCommon.ts"
-import { LibraryCardMovie } from "./libraryCardMovie.tsx"
-import { LibraryCardMusic } from "./libraryCardMusic.tsx"
-import { LibraryCardShow } from "./libraryCardShow.tsx"
+import { Suspense, useEffect, useState } from "react"
+import { Clapperboard, Music, Tv } from "lucide-react"
+import { LibrayCounter } from "./libraryCounter.tsx"
 
 interface LibraryCardProps {
 	libraryId: string,
@@ -27,38 +27,37 @@ export function LibraryCard(
 	}: LibraryCardProps
 ) {
 	const iconSize = 24
+	const [image, setImage] = useState<JSX.Element | null>(<></>)
+
+	useEffect(() => {
+		switch (type) {
+			case LibraryType.Music:
+				setImage(<Music size={iconSize} className="flex-none" />)
+				break
+			case LibraryType.Show:
+				setImage(<Tv size={iconSize} className="flex-none" />)
+				break
+			case LibraryType.Movie:
+				setImage(<Clapperboard size={iconSize} className="flex-none" />)
+				break
+		}
+	}, [type, setImage, iconSize])
 
 	return (
-		type === LibraryType.Movie ?
-			<LibraryCardMovie
-				libraryId={libraryId}
-				title={title}
-				description={description}
-				iconSize={iconSize}
-				{...props}
-			/> :
-			type === LibraryType.Music ?
-				<LibraryCardMusic
-					libraryId={libraryId}
-					title={title}
-					description={description}
-					iconSize={iconSize}
-					{...props}
-				/> :
-				type === LibraryType.Show ?
-					<LibraryCardShow
+		<Card {...props}>
+			<CardHeader>
+				<CardTitle className="flex gap-4">{image} {title}</CardTitle>
+				<CardDescription>{description}</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<Suspense fallback={<div>Loading...</div>}>
+					<LibrayCounter
 						libraryId={libraryId}
-						title={title}
-						description={description}
-						iconSize={iconSize}
-						{...props}
-					/> :
-					<Card {...props}>
-						<CardHeader>
-							<CardTitle className="flex gap-4">{title}</CardTitle>
-							<CardDescription>{description}</CardDescription>
-						</CardHeader>
-						<CardContent>{content}</CardContent>
-					</Card>
+						type={type}
+						details={true}
+					/>
+				</Suspense>
+			</CardContent>
+		</Card>
 	)
 }

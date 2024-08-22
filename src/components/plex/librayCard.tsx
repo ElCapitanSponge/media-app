@@ -47,7 +47,12 @@ export function LibraryCard(
 		<Card {...props}>
 			<CardHeader>
 				<CardTitle className="flex gap-4">{image} {title}</CardTitle>
-				<CardDescription>{description}</CardDescription>
+				<CardDescription>{
+					description
+						.replace("artist", "Audio")
+						.replace("show", "Shows")
+						.replace("movie", "Movies")
+				}</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<Suspense fallback={<div>Loading...</div>}>

@@ -8,7 +8,7 @@ import {
 import { LibraryType } from "@/lib/enums/plexCommon.ts"
 import { Suspense, useEffect, useState } from "react"
 import { Clapperboard, Music, Tv } from "lucide-react"
-import { LibrayCounter } from "./libraryCounter.tsx"
+import { LibraryCounter } from "./libraryCounter.tsx"
 
 interface LibraryCardProps {
 	libraryId: string,
@@ -56,7 +56,7 @@ export function LibraryCard(
 			</CardHeader>
 			<CardContent>
 				<Suspense fallback={<div>Loading...</div>}>
-					<LibrayCounter
+					<LibraryCounter
 						libraryId={libraryId}
 						type={type}
 						details={true}

@@ -1,7 +1,7 @@
 import { useGetLibrariesQuery } from "@/services/plex.ts"
 import { useAppDispatch, useAppSelector } from "@/hooks.ts"
 import { createUpdateLibrary } from "@/slices/library.ts"
-import { LibraryCard } from "@/components/plex/librayCard.tsx"
+import LibraryCard from "@/components/plex/librayCard.tsx"
 import { useEffect, useState } from "react"
 
 const Root = () => {

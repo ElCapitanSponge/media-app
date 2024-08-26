@@ -1,37 +1,20 @@
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle
-} from "../ui/card.tsx"
 import { useEffect, useState } from "react"
-import { Clapperboard } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/hooks.ts"
 import { useGetMovieLibraryQuery } from "@/services/plex.ts"
 import { createUpdateMovieCollectionFull } from "@/slices/movies.ts"
+import { CounterContentProps } from "@/lib/interfaces/plexCommon"
 
-interface LibraryMovieCardProps {
-	libraryId: string,
-	title: string,
-	description: string,
-	iconSize: number
-}
-
-export function LibraryCardMovie(
+const MovieCounter = (
 	{
 		libraryId,
-		title,
-		description,
-		iconSize,
-		...props
-	}: LibraryMovieCardProps
-) {
+		details = false
+	}: CounterContentProps
+) => {
 	const [content, setContent] = useState<JSX.Element | null>(<></>)
 	const movies = useAppSelector(state => state.movies.movies)
 	const dispatch = useAppDispatch()
 
-	const image = <Clapperboard size={iconSize} className="flex-none" />
+	console.log(libraryId)
 
 	const { data, error, isLoading } = useGetMovieLibraryQuery(
 		parseInt(libraryId)
@@ -51,19 +34,17 @@ export function LibraryCardMovie(
 		if (isLoading) {
 			setContent(<div>Loading...</div>)
 		} else if (movies === undefined || movieCount === 0) {
-			setContent(<div>No movies</div>)
+			setContent(<div>{details ? "No Movies" : "-"}</div>)
 		} else {
-			setContent(<div>{movieCount} movies</div>)
+			setContent(<div>{movieCount}{details ? " movies" : ""}</div>)
 		}
-	}, [movies, isLoading, setContent, libraryId])
+	}, [movies, isLoading, setContent, libraryId, details])
 
 	return (
-		<Card {...props}>
-			<CardHeader>
-				<CardTitle className="flex gap-4">{image} {title}</CardTitle>
-				<CardDescription>{description}</CardDescription>
-			</CardHeader>
-			<CardContent>{content}</CardContent>
-		</Card>
+		<>
+			{content}
+		</>
 	)
 }
+
+export default MovieCounter

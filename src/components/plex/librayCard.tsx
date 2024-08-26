@@ -8,7 +8,7 @@ import {
 import { LibraryType } from "@/lib/enums/plexCommon.ts"
 import { Suspense, useEffect, useState } from "react"
 import { Clapperboard, Music, Tv } from "lucide-react"
-import { LibraryCounter } from "./libraryCounter.tsx"
+import LibraryCounter from "./libraryCounter.tsx"
 
 interface LibraryCardProps {
 	libraryId: string,
@@ -17,7 +17,7 @@ interface LibraryCardProps {
 	type: LibraryType
 }
 
-export function LibraryCard(
+const LibraryCard = (
 	{
 		libraryId,
 		title,
@@ -25,7 +25,7 @@ export function LibraryCard(
 		type,
 		...props
 	}: LibraryCardProps
-) {
+) => {
 	const iconSize = 24
 	const [image, setImage] = useState<JSX.Element | null>(<></>)
 
@@ -66,3 +66,5 @@ export function LibraryCard(
 		</Card>
 	)
 }
+
+export default LibraryCard

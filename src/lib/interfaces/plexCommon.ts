@@ -12,3 +12,8 @@ export interface TagIdFilter {
 export interface PlexPayload<T> {
 	mediaContainer: T;
 }
+
+export interface CounterContentProps {
+	libraryId: string,
+	details?: boolean
+}

@@ -16,8 +16,6 @@ const Root = () => {
 		})
 	}
 
-	console.log(libraries)
-
 	useEffect(() => {
 		if (isLoading) {
 			setContent(<div>Loading...</div>)

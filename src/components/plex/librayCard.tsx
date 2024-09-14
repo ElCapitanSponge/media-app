@@ -6,11 +6,11 @@ import {
 	CardTitle
 } from "../ui/card.tsx"
 import { LibraryType } from "@/lib/enums/plexCommon.ts"
-import { Suspense, useEffect, useState } from "react"
+import { HTMLAttributes, Suspense, useEffect, useState } from "react"
 import { Clapperboard, Music, Tv } from "lucide-react"
 import LibraryCounter from "./libraryCounter.tsx"
 
-interface LibraryCardProps {
+interface LibraryCardProps extends HTMLAttributes<HTMLDivElement> {
 	libraryId: string,
 	title: string,
 	description: string,

@@ -14,8 +14,6 @@ const MovieCounter = (
 	const movies = useAppSelector(state => state.movies.movies)
 	const dispatch = useAppDispatch()
 
-	console.log(libraryId)
-
 	const { data, error, isLoading } = useGetMovieLibraryQuery(
 		parseInt(libraryId)
 	)

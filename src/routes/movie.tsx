@@ -2,6 +2,7 @@ import { useAppDispatch } from "@/hooks"
 import useGetMovie from "@/lib/helpers/getMovie"
 import { setPageTitle } from "@/slices/pageTitle"
 import { useParams } from "react-router-dom"
+import { JsonSnippet } from "@/lib/snippets/json"
 
 const Movie = () => {
 	const params = useParams<{ libraryId: string, movieId: string }>()
@@ -16,9 +17,7 @@ const Movie = () => {
 	return (
 		<>
 			<h1>{movie?.movie.title}</h1>
-			<pre>
-				{JSON.stringify(movie?.movie, null, 2)}
-			</pre>
+			<JsonSnippet json={JSON.stringify(movie?.movie, null, 2)} />
 		</>
 	)
 }

@@ -65,27 +65,32 @@ const moviesSlice = createSlice({
 			console.log(bulkAdd)
 
 			state.movies.push(...bulkAdd)
+		},
+		resetMovies: state => {
+			state.movies = []
+			return state
 		}
 	}
 })
 
 export const {
 	createUpdateMovieCollection,
-	createUpdateMovieCollectionFull
+	createUpdateMovieCollectionFull,
+	resetMovies
 } = moviesSlice.actions
 
 export const getMoviesForLibraryCount = (
-	state: MoviesState,
+	movies: MoviesStruct[],
 	libraryId: string
 ) => {
-	return state.movies.filter(movie => movie.library === libraryId).length
+	return movies.filter(movie => movie.library === libraryId).length
 }
 
 export const getMoviesForLibrary = (
-	state: MoviesState,
+	movies: MoviesStruct[],
 	libraryId: string
 ) => {
-	return state.movies.filter(movie => movie.library === libraryId)
+	return movies.filter(movie => movie.library === libraryId)
 }
 
 export default moviesSlice.reducer

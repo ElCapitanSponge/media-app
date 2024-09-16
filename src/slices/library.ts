@@ -38,8 +38,13 @@ export const {
 	createUpdateLibrary
 } = librarySlice.actions
 
-export const selectLibraries = (state: { library: LibraryState }) => {
+export const getLibraries = (state: { library: LibraryState }) => {
 	return state.library.libraries
+}
+
+export const getLibrary = (state: { library: LibraryState }, key: string) => {
+	return state.library.libraries
+		.find(library => library.key === key)
 }
 
 export const getMovieLibraries = (state: { library: LibraryState }) => {

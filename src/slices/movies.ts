@@ -93,4 +93,17 @@ export const getMoviesForLibrary = (
 	return movies.filter(movie => movie.library === libraryId)
 }
 
+export const getMovie = (
+	movies: MoviesStruct[],
+	libraryId: string,
+	movieId: string
+) => {
+	return movies.find(movie => {
+		return (
+			movie.library === libraryId &&
+			movie.movie.key === movieId
+		)
+	})
+}
+
 export default moviesSlice.reducer

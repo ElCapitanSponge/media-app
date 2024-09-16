@@ -3,12 +3,15 @@ import { useAppDispatch, useAppSelector } from "@/hooks.ts"
 import { createUpdateLibrary } from "@/slices/library.ts"
 import LibraryCard from "@/components/plex/librayCard.tsx"
 import { useEffect, useState } from "react"
+import { setPageTitle } from "@/slices/pageTitle.ts"
 
 const Root = () => {
 	const libraries = useAppSelector(state => state.libraries.libraries)
 	const dispatch = useAppDispatch()
 	const { data, error, isLoading } = useGetLibrariesQuery()
 	const [content, setContent] = useState<JSX.Element | null>(<></>)
+
+	dispatch(setPageTitle("Libraries"))
 
 	if (!error) {
 		data?.mediaContainer.directory.map(library => {
@@ -43,7 +46,6 @@ const Root = () => {
 
 	return (
 		<>
-			<h1>Libraries</h1>
 			<div>
 				{content}
 			</div>

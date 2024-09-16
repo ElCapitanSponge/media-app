@@ -1,7 +1,13 @@
+import { useAppDispatch } from "@/hooks.ts"
+import { setPageTitle } from "@/slices/pageTitle"
+
 const Movies = () => {
+	const dispatch = useAppDispatch()
+
+	dispatch(setPageTitle("Movies"))
+
 	return (
 		<>
-			<h1>Movies</h1>
 			<p>Here are some movies</p>
 		</>
 	)

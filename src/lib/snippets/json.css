@@ -1,26 +1,27 @@
-/* TODO: Implement preferred color scheme */
 pre.json__snippet {
 	outline: 1px solid #ccc;
 	padding: 5px;
 	margin: 15px;
+	color: #FE8019;
+	background-color: #020202;
 
 	.string {
-		color: lime;
+		color: #B7BB26;
 	}
 
 	.number {
-		color: darkorange;
+		color: #D3869B;
 	}
 
 	.boolean {
-		color: blue;
+		color: #D3869B;
 	}
 
 	.null {
-		color: magenta;
+		color: #FE8019;
 	}
 
 	.key {
-		color: red;
+		color: #82A498;
 	}
 }

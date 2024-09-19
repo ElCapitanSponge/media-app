@@ -18,6 +18,7 @@ const syntaxHighlight = (json: string): string => {
 			let cls = "number"
 			if (match.startsWith("\"")) {
 				if (match.endsWith(":")) {
+					match = match.slice(0, -1)
 					cls = "key"
 				} else {
 					cls = "string"
@@ -27,7 +28,8 @@ const syntaxHighlight = (json: string): string => {
 			} else if (/null/.test(match)) {
 				cls = "null"
 			}
-			return `<span class="${cls}">${match}</span>`
+			const clsEnd = cls === "key" ? ":" : ""
+			return `<span class="${cls}">${match}</span>${clsEnd}`
 		}
 	)
 }

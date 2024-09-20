@@ -1,5 +1,6 @@
+import PlexImage from "@/components/plex/plexImage"
 import { Button } from "@/components/ui/button"
-import { Card, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { useAppDispatch } from "@/hooks.ts"
 import useGetMovies from "@/lib/helpers/getMovies"
 import { setPageTitle } from "@/slices/pageTitle"
@@ -18,7 +19,6 @@ const Movies = () => {
 		<>
 			<div className="flex flex-wrap justify-around">
 				{movies.map(record => {
-					console.log(record.movie.key)
 					const key = record.movie.key.split("/").pop()
 					const link = `/movies/${libraryId}/${key}`
 					return (
@@ -29,6 +29,9 @@ const Movies = () => {
 							<CardHeader>
 								{record.movie.title}
 							</CardHeader>
+							<CardContent>
+								<PlexImage path={record.movie.thumb} altText={record.movie.title} />
+							</CardContent>
 							<CardFooter>
 								<Button
 									variant="ghost"

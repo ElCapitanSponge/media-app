@@ -37,14 +37,6 @@ module.exports = {
 		],
 		"@stylistic/arrow-parens": ["error", "as-needed"],
 		"@stylistic/arrow-spacing": "error",
-		"@stylistic/max-len": [
-			"error",
-			{
-				code: 80,
-				ignoreUrls: true,
-				ignoreComments: true
-			}
-		],
 		"@stylistic/no-mixed-spaces-and-tabs": "error",
 		"@stylistic/no-trailing-spaces": "error",
 		"@stylistic/ts/comma-spacing": [

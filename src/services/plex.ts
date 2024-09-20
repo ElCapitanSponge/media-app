@@ -13,15 +13,15 @@ export const plexApi = createApi({
 		getMovieLibrary: builder.query<PlexPayload<PlexMoviesPayload>, number>({
 			query: id => `movies/${id}`
 		}),
-		getImage: builder.query<string, string>({
-			query: path => `image/background/${encodeURIComponent(path)}`,
-			transformResponse: (response, _, arg) => {
-				const tmpPath: string = arg as unknown as string
-				const fileType = tmpPath.split(".").pop()
-				const encodedImage = response as string
-				return `data:image/${fileType};base64,${encodedImage}`
-			}
-		})
+		getImage: builder.query({
+			query: (path: string) => ({
+				url: `image/${encodeURIComponent(path)}`,
+				responseHandler: async response => {
+					const blob = await response.blob()
+					return new Blob([blob], { type: "image/jpeg" })
+				}
+			}),
+		}),
 	})
 })
 

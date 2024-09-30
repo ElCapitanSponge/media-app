@@ -2,10 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { PlexPayload } from "../lib/interfaces/plexCommon.ts"
 import { PlexLibraryPayload } from "../lib/interfaces/plexLibrary.ts"
 import { PlexMoviesPayload } from "../lib/interfaces/plexMovies.ts"
+import { env } from "@/env.ts"
 
 export const plexApi = createApi({
 	reducerPath: "plexApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5014/plex/" }),
+	baseQuery: fetchBaseQuery({ baseUrl: env.VITE_API_URL }),
 	endpoints: builder => ({
 		getLibraries: builder.query<PlexPayload<PlexLibraryPayload>, void>({
 			query: () => "libraries"

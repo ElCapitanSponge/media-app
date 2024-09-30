@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks.ts"
-import { useGetMovieLibraryQuery } from "@/services/plex.ts"
+import { useGetMovieLibraryQuery } from "@/services/plex"
 import {
 	createUpdateMovieCollectionFull,
 	getMoviesForLibrary,

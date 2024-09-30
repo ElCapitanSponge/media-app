@@ -19,10 +19,10 @@ const PlexImage = ({
 		} else if (error) {
 			setContent(<div>Error getting image</div>)
 		} else {
-			const img = URL.createObjectURL(data)
+			const img = URL.createObjectURL(data as Blob)
 			setContent(<img src={img} alt={altText} />)
 		}
-	}, [altText, data, isLoading, setContent])
+	}, [altText, data, isLoading, setContent, error])
 
 	return (
 		<>

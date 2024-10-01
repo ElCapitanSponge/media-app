@@ -6,7 +6,7 @@ import { env } from "@/env.ts"
 
 export const plexApi = createApi({
 	reducerPath: "plexApi",
-	baseQuery: fetchBaseQuery({ baseUrl: env.VITE_API_URL }),
+	baseQuery: fetchBaseQuery({ baseUrl: `${env.VITE_API_URL}/plex/` }),
 	endpoints: builder => ({
 		getLibraries: builder.query<PlexPayload<PlexLibraryPayload>, void>({
 			query: () => "libraries"

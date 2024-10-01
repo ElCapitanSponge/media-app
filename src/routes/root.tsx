@@ -11,7 +11,6 @@ const Root = () => {
 	const { data, error, isLoading } = useGetLibrariesQuery()
 	const [content, setContent] = useState<JSX.Element | null>(<></>)
 
-	dispatch(setPageTitle("Libraries"))
 
 	if (!error) {
 		data?.mediaContainer.directory.map(library => {
@@ -25,6 +24,7 @@ const Root = () => {
 		} else if (libraries.length === 0) {
 			setContent(<>No libraries found</>)
 		} else if (libraries.length > 0) {
+			dispatch(setPageTitle("Libraries"))
 			setContent(<>
 				<div className="flex flex-wrap justify-around">
 					{libraries.map(library =>
@@ -42,7 +42,7 @@ const Root = () => {
 		} else {
 			setContent(<></>)
 		}
-	}, [setContent, libraries, isLoading])
+	}, [setContent, libraries, isLoading, dispatch])
 
 	return (
 		<>

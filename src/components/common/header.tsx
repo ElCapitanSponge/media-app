@@ -3,9 +3,11 @@ import { Button } from "../ui/button"
 import { HeaderLink } from "@/lib/interfaces/common"
 import { useAppSelector } from "@/hooks.ts"
 import { useEffect, useState } from "react"
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
 
 const links: HeaderLink[] = [
 	{
+		key: "home",
 		title: "Home",
 		href: "/",
 		icon: () => <Home />
@@ -23,6 +25,7 @@ const HeaderBar = () => {
 		if (path !== "/") {
 			setBackButton(
 				<Button
+					key="back"
 					variant="link"
 					onClick={() => window.history.back()}
 				>
@@ -38,10 +41,10 @@ const HeaderBar = () => {
 		<header className="w-full border-b mb-8">
 			<div className="flex h-14 items-center justify-between">
 				<div>
-					{links.map((link, index) =>
+					{links.map(link =>
 						<>
 							<Button
-								key={index}
+								key={link.key}
 								variant="link"
 								onClick={() => window.location.href = link.href}
 							>
@@ -52,11 +55,18 @@ const HeaderBar = () => {
 					{backButton}
 				</div>
 				<div>
-					<h1 className="text-2xl font-bold">
+					<h1 className="text-2xl font-bold" key="page_title">
 						{title}
 					</h1>
 				</div>
-				<div></div>
+				<div className="mx-4">
+					<SignedOut>
+						<SignInButton />
+					</SignedOut>
+					<SignedIn>
+						<UserButton />
+					</SignedIn>
+				</div>
 			</div>
 		</header >
 	)
